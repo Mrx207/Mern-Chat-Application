@@ -1,0 +1,37 @@
+# Create a new file named .gitignore
+
+# Node.js and npm files
+node_modules/
+package-lock.json
+
+# MongoDB files
+data/
+
+# Client-side files
+client/build/
+client/node_modules/
+
+# Server-side files
+server/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Log files
+logs/
+*.log
+
+# Environment files
+.env
+.env.development
+.env.production
+
+# Miscellaneous files
+coverage/
+dist/
+tmp/
