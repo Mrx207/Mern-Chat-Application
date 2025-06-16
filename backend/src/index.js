@@ -5,9 +5,10 @@ import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import messageRoutes from "./routes/message.route.js";
 import cors from "cors";
+import { app,server } from "./lib/socket.js";
+import path from "path";
 
 dotenv.config();
-const app = express();
 app.use(express.json());
 app.use(cookieParser()); // ✅ FIXED
 app.use(
@@ -17,13 +18,14 @@ app.use(
   })
 );
 const PORT = process.env.PORT || 5001; // ✅ FIXED
+const __dirname = path.resolve();
 
 app.get("/", (req, res) => {
   console.log("Server is running...");
   res.send("Hello from server");
 });
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
   // ✅ Ensure DB connects only after server starts
   console.log(`Listening on port ${PORT}`);
   await connectDB();
@@ -36,3 +38,10 @@ app.use((err, req, res, next) => {
 
 app.use("/api/auth", router);
 app.use("/api/message", messageRoutes);
+
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
